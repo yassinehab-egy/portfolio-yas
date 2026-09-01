@@ -1,0 +1,1214 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yassin Ehab — Front-End Developer</title>
+<meta name="description" content="Yassin Ehab builds fast, bilingual, functional websites and small web apps for real businesses and real events.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#120f1e;
+    --bg-rgb:18,15,30;
+    --panel:#1a1730;
+    --panel-2:#16132a;
+    --line:rgba(240,238,248,0.09);
+    --line-strong:rgba(240,238,248,0.16);
+    --text:#f0eef8;
+    --muted:#9a93b3;
+    --accent:#8b6bff;
+    --accent-dim:#7451f0;
+    --accent-rgb:139,107,255;
+    --accent2:#4fd8c4;
+    --accent2-rgb:79,216,196;
+    --radius:14px;
+    --wrap:1120px;
+    --ff-display:'Space Grotesk', 'Tajawal', sans-serif;
+    --ff-body:'Inter', 'Tajawal', sans-serif;
+    --ff-mono:'JetBrains Mono', 'Tajawal', monospace;
+    --mx:50%; --my:0%;
+  }
+ 
+  html[data-theme="light"]{
+    --bg:#f6f4fb;
+    --bg-rgb:246,244,251;
+    --panel:#ffffff;
+    --panel-2:#efecfa;
+    --line:rgba(23,20,42,0.09);
+    --line-strong:rgba(23,20,42,0.16);
+    --text:#17142a;
+    --muted:#635f7a;
+    --accent:#6d3ff2;
+    --accent-dim:#5a30d9;
+    --accent-rgb:109,63,242;
+    --accent2:#0f9c8c;
+    --accent2-rgb:15,156,140;
+  }
+ 
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    *{animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important; scroll-behavior:auto !important;}
+  }
+ 
+  body{
+    margin:0;
+    background:
+      radial-gradient(1100px 620px at 82% -10%, rgba(var(--accent-rgb),0.10), transparent 60%),
+      radial-gradient(900px 500px at -10% 20%, rgba(var(--accent2-rgb),0.06), transparent 55%),
+      var(--bg);
+    color:var(--text);
+    font-family:var(--ff-body);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+    transition:background 0.5s ease, color 0.4s ease;
+  }
+ 
+  /* faint blueprint grid, gently drifting */
+  .grid-bg{
+    position:fixed; inset:-64px; z-index:0; pointer-events:none;
+    background-image:
+      linear-gradient(var(--line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--line) 1px, transparent 1px);
+    background-size:64px 64px;
+    -webkit-mask-image:linear-gradient(180deg, rgba(0,0,0,0.5), transparent 70%);
+            mask-image:linear-gradient(180deg, rgba(0,0,0,0.5), transparent 70%);
+    opacity:0.5;
+    animation:driftGrid 40s linear infinite;
+  }
+  @keyframes driftGrid{
+    from{background-position:0 0, 0 0;}
+    to{background-position:64px 64px, 64px 64px;}
+  }
+ 
+  a{color:inherit; text-decoration:none;}
+  h1,h2,h3{font-family:var(--ff-display); margin:0; letter-spacing:-0.01em;}
+  p{margin:0;}
+ 
+  .wrap{max-width:var(--wrap); margin:0 auto; padding:0 28px; position:relative; z-index:1;}
+  section{position:relative; z-index:1;}
+ 
+  ::selection{background:var(--accent); color:#fff;}
+ 
+  a:focus-visible, button:focus-visible, [tabindex]:focus-visible{
+    outline:2px solid var(--accent2);
+    outline-offset:3px;
+    border-radius:4px;
+  }
+ 
+  /* ---------- RTL adjustments ---------- */
+  html[dir="rtl"] .eyebrow,
+  html[dir="rtl"] .card-tag,
+  html[dir="rtl"] .marquee-track span{
+    text-transform:none;
+    letter-spacing:normal;
+  }
+  html[dir="rtl"] .hero h1{max-width:22ch;}
+  html[dir="rtl"] .hero h1 em .caret{margin-inline-start:2px; margin-left:0;}
+  html[dir="rtl"] .feature-list li::before{content:'←';}
+  html[dir="rtl"] .card-preview-wrap{border-inline-end:1px solid var(--line); border-right:none;}
+  @media (max-width:880px){
+    html[dir="rtl"] .card-preview-wrap{border-inline-end:none; border-bottom:1px solid var(--line);}
+  }
+ 
+  /* ---------- scroll progress bar ---------- */
+  .progress{
+    position:fixed; top:0; left:0; height:3px; width:0%;
+    background:linear-gradient(90deg, var(--accent), var(--accent2));
+    z-index:100; transition:width 0.1s linear;
+  }
+ 
+  .eyebrow{
+    font-family:var(--ff-mono);
+    font-size:12.5px;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--accent);
+    display:flex; align-items:center; gap:10px;
+  }
+  .eyebrow::before{
+    content:'';
+    width:7px; height:7px; border-radius:50%;
+    background:var(--accent);
+    box-shadow:0 0 0 3px rgba(var(--accent-rgb),0.18);
+    animation:pulseDot 2.2s ease-in-out infinite;
+    flex:none;
+  }
+  @keyframes pulseDot{
+    0%,100%{box-shadow:0 0 0 0 rgba(var(--accent-rgb),0.35);}
+    50%{box-shadow:0 0 0 6px rgba(var(--accent-rgb),0);}
+  }
+ 
+  @keyframes fadeUp{
+    from{opacity:0; transform:translateY(20px);}
+    to{opacity:1; transform:translateY(0);}
+  }
+  @keyframes fadeIn{
+    from{opacity:0;}
+    to{opacity:1;}
+  }
+  .load-anim{opacity:0; animation:fadeUp 0.8s cubic-bezier(.22,1,.36,1) forwards;}
+ 
+  /* ---------- NAV ---------- */
+  header.nav{
+    position:sticky; top:0; z-index:50;
+    background:rgba(var(--bg-rgb),0.78);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+    animation:fadeIn 0.6s ease both;
+    transition:background 0.4s ease, border-color 0.4s ease;
+  }
+  .nav-inner{
+    max-width:var(--wrap); margin:0 auto; padding:16px 28px;
+    display:flex; align-items:center; justify-content:space-between; gap:16px;
+  }
+  .logo{
+    font-family:var(--ff-mono); font-weight:500; font-size:15px;
+    display:flex; align-items:center; gap:10px;
+  }
+  .logo .mark{
+    width:30px; height:30px; border-radius:8px;
+    border:1px solid var(--line-strong);
+    display:flex; align-items:center; justify-content:center;
+    font-family:var(--ff-display); font-weight:700; font-size:13px;
+    color:var(--accent);
+    transition:transform 0.4s cubic-bezier(.22,1,.36,1), border-color 0.3s, box-shadow 0.3s;
+    flex:none;
+  }
+  .logo:hover .mark{
+    transform:rotate(-8deg) scale(1.08);
+    border-color:var(--accent);
+    box-shadow:0 0 0 4px rgba(var(--accent-rgb),0.12);
+  }
+  .nav-links{display:flex; gap:28px; align-items:center;}
+  .nav-links a{
+    font-size:14.5px; color:var(--muted); position:relative; padding-bottom:3px;
+    transition:color 0.15s;
+  }
+  .nav-links a::after{
+    content:''; position:absolute; left:0; bottom:0; width:0; height:1px;
+    background:var(--accent); transition:width 0.25s cubic-bezier(.22,1,.36,1);
+  }
+  .nav-links a:hover{color:var(--text);}
+  .nav-links a:hover::after{width:100%;}
+ 
+  .btn{
+    font-family:var(--ff-mono); font-size:13.5px;
+    padding:10px 16px; border-radius:9px;
+    border:1px solid var(--line-strong);
+    display:inline-flex; align-items:center; gap:8px;
+    transition:border-color 0.15s, transform 0.15s, background 0.15s, box-shadow 0.25s, color 0.15s;
+    white-space:nowrap;
+    position:relative; overflow:hidden;
+    color:var(--text);
+    cursor:pointer;
+    background:transparent;
+    font:inherit; font-family:var(--ff-mono); font-size:13.5px;
+  }
+  .btn::before{
+    content:''; position:absolute; top:0; left:-120%; width:60%; height:100%;
+    background:linear-gradient(120deg, transparent, rgba(255,255,255,0.35), transparent);
+    transform:skewX(-20deg);
+    transition:left 0.6s ease;
+  }
+  .btn:hover::before{left:140%;}
+  .btn:hover{border-color:var(--accent); transform:translateY(-2px); box-shadow:0 8px 20px -8px rgba(var(--accent-rgb),0.35);}
+  .btn:active{transform:translateY(0px) scale(0.98);}
+  .btn-solid{
+    background:var(--accent); color:#fff; border-color:var(--accent); font-weight:500;
+  }
+  .btn-solid:hover{background:var(--accent-dim); border-color:var(--accent-dim);}
+  .btn-ghost{padding:9px 13px;}
+  .nav-cta{display:flex; align-items:center; gap:10px;}
+  @media (max-width:760px){
+    .nav-links{display:none;}
+  }
+ 
+  /* ---------- HERO ---------- */
+  .hero{padding:100px 0 0; position:relative;}
+  .hero::before{
+    content:'';
+    position:absolute; inset:-40px 0 auto 0; height:520px; z-index:-1;
+    background:radial-gradient(420px 320px at var(--mx) var(--my), rgba(var(--accent-rgb),0.14), transparent 65%);
+    transition:background-position 0.1s linear;
+    pointer-events:none;
+  }
+  .hero h1{
+    font-size:clamp(38px, 6vw, 68px);
+    font-weight:700;
+    line-height:1.15;
+    margin:20px 0 22px;
+    max-width:16ch;
+    min-height:calc(3 * 1.15em);
+  }
+  .hero h1 em{
+    font-style:normal;
+    color:var(--accent);
+    position:relative;
+  }
+  .hero h1 em .caret{
+    display:inline-block; width:3px; margin-inline-start:2px;
+    background:var(--accent);
+    animation:blink 1s step-end infinite;
+  }
+  @keyframes blink{ 0%,100%{opacity:1;} 50%{opacity:0;} }
+ 
+  .hero-sub{
+    font-size:18px; color:var(--muted); max-width:56ch; margin-bottom:34px;
+  }
+  .hero-actions{display:flex; gap:14px; flex-wrap:wrap; margin-bottom:56px;}
+ 
+  /* live proof strip */
+  .proof{
+    border:1px solid var(--line); border-radius:var(--radius);
+    background:linear-gradient(180deg, rgba(var(--accent-rgb),0.03), transparent);
+    padding:20px 24px;
+    display:grid;
+    grid-template-columns:1.1fr 1px 1fr;
+    gap:24px;
+    align-items:center;
+    transition:border-color 0.4s ease, background 0.4s ease, box-shadow 0.4s ease;
+  }
+  .proof:hover{box-shadow:0 20px 50px -30px rgba(var(--accent-rgb),0.4);}
+  .proof-divider{width:1px; height:100%; background:var(--line); min-height:60px;}
+  .proof-label{font-family:var(--ff-mono); font-size:12px; color:var(--muted); letter-spacing:0.06em; margin-bottom:10px;}
+  html[dir="rtl"] .proof-label{letter-spacing:normal;}
+  .proof-clock{
+    font-family:var(--ff-mono); font-size:34px; font-weight:500; color:var(--text);
+    display:flex; align-items:baseline; gap:12px;
+  }
+  .proof-clock #clock.tick{animation:tickPulse 0.4s ease;}
+  @keyframes tickPulse{
+    0%{ text-shadow:0 0 0 rgba(var(--accent2-rgb),0); }
+    40%{ text-shadow:0 0 14px rgba(var(--accent2-rgb),0.55); color:var(--accent2); }
+    100%{ text-shadow:0 0 0 rgba(var(--accent2-rgb),0); color:var(--text); }
+  }
+  .proof-clock .date{font-size:13px; color:var(--muted); font-weight:400;}
+  .proof-toggle-row{display:flex; align-items:center; gap:12px; margin-top:12px; flex-wrap:wrap;}
+  .proof-toggle-row .tag{font-family:var(--ff-mono); font-size:12px; color:var(--muted);}
+  .switch{
+    width:44px; height:24px; border-radius:999px; border:1px solid var(--line-strong);
+    background:var(--panel-2); position:relative; cursor:pointer; flex:none;
+    transition:background 0.25s ease, border-color 0.25s ease;
+  }
+  .switch .knob{
+    position:absolute; top:2px; left:2px; width:18px; height:18px; border-radius:50%;
+    background:var(--muted); transition:transform 0.3s cubic-bezier(.34,1.56,.64,1), background 0.25s;
+    display:flex; align-items:center; justify-content:center; font-size:10px; line-height:1;
+  }
+  .switch[aria-pressed="true"]{background:rgba(var(--accent-rgb),0.25); border-color:var(--accent);}
+  .switch[aria-pressed="true"] .knob{transform:translateX(20px); background:var(--accent);}
+  .switch .knob::after{content:'🌙';}
+  .switch[aria-pressed="true"] .knob::after{content:'☀';}
+ 
+  .proof-right{display:flex; flex-direction:column; gap:6px;}
+  .proof-right .note{
+    font-family:var(--ff-mono); font-size:12.5px; color:var(--accent2);
+    background:var(--panel-2); border:1px solid var(--line); border-radius:6px;
+    padding:12px 14px; display:block; line-height:1.6;
+  }
+ 
+  @media (max-width:720px){
+    .proof{grid-template-columns:1fr; }
+    .proof-divider{display:none;}
+  }
+ 
+  /* ---------- marquee strip ---------- */
+  .marquee-strip{
+    margin-top:56px; border-top:1px solid var(--line); border-bottom:1px solid var(--line);
+    overflow:hidden; white-space:nowrap; padding:14px 0;
+    background:linear-gradient(180deg, rgba(var(--accent-rgb),0.015), transparent);
+  }
+  .marquee-track{
+    display:inline-flex; gap:0; animation:marquee 26s linear infinite;
+  }
+  .marquee-track span{
+    font-family:var(--ff-mono); font-size:12.5px; color:var(--muted);
+    padding:0 22px; display:inline-flex; align-items:center; gap:10px;
+    text-transform:uppercase; letter-spacing:0.08em;
+  }
+  .marquee-track span::before{content:'◆'; color:var(--accent); font-size:9px;}
+  @keyframes marquee{
+    from{transform:translateX(0);}
+    to{transform:translateX(-50%);}
+  }
+  html[dir="rtl"] .marquee-track{animation-direction:reverse;}
+ 
+  /* ---------- SECTION HEAD ---------- */
+  .section-head{margin-bottom:44px; padding-top:90px; margin-top:-90px;}
+  .section-head h2{font-size:clamp(28px,3.4vw,38px); margin-top:14px; max-width:22ch;}
+  .section-head p{color:var(--muted); max-width:56ch; margin-top:14px; font-size:15.5px;}
+  .rule{
+    width:0; height:2px; background:linear-gradient(90deg, var(--accent), var(--accent2));
+    margin-top:16px; transition:width 0.8s cubic-bezier(.22,1,.36,1);
+  }
+  .section-head.in-view .rule{width:64px;}
+ 
+  /* ---------- WORK ---------- */
+  .work{padding:70px 0 40px;}
+  .cards{display:flex; flex-direction:column; gap:26px;}
+ 
+  .card{
+    border:1px solid var(--line); border-radius:var(--radius);
+    background:var(--panel);
+    overflow:hidden;
+    display:grid;
+    grid-template-columns:1.15fr 1fr;
+    opacity:0; transform:translateY(36px) scale(0.985);
+    transition:opacity 0.7s cubic-bezier(.22,1,.36,1), transform 0.7s cubic-bezier(.22,1,.36,1), box-shadow 0.35s ease, border-color 0.35s ease, background 0.4s ease;
+  }
+  .card.in-view{opacity:1; transform:translateY(0) scale(1);}
+  .card:hover{
+    box-shadow:0 30px 60px -34px rgba(0,0,0,0.35), 0 0 0 1px rgba(var(--accent-rgb),0.25);
+    border-color:rgba(var(--accent-rgb),0.35);
+    transform:translateY(-6px) scale(1);
+  }
+ 
+  @media (max-width:880px){
+    .card{grid-template-columns:1fr;}
+  }
+ 
+  .card-preview-wrap{
+    background:var(--panel-2);
+    border-right:1px solid var(--line);
+    display:flex; flex-direction:column;
+    transition:background 0.4s ease;
+  }
+  @media (max-width:880px){ .card-preview-wrap{border-right:none; border-bottom:1px solid var(--line);} }
+ 
+  .chrome{
+    display:flex; align-items:center; gap:10px;
+    padding:11px 14px;
+    border-bottom:1px solid var(--line);
+    background:var(--panel);
+    transition:background 0.4s ease;
+  }
+  .dots{display:flex; gap:6px;}
+  .dots span{width:9px; height:9px; border-radius:50%; background:var(--line-strong);}
+  .dots span:nth-child(1){background:rgba(var(--accent-rgb),0.35);}
+  .dots span:nth-child(2){background:rgba(var(--accent2-rgb),0.35);}
+  .chrome .url{
+    font-family:var(--ff-mono); font-size:11.5px; color:var(--muted);
+    background:var(--panel-2); border:1px solid var(--line); border-radius:6px;
+    padding:4px 10px; flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+    direction:ltr; text-align:left;
+  }
+  .chrome .live-dot{
+    font-family:var(--ff-mono); font-size:10.5px; color:var(--accent2);
+    display:flex; align-items:center; gap:5px; flex:none;
+  }
+  .chrome .live-dot::before{
+    content:''; width:6px; height:6px; border-radius:50%; background:var(--accent2);
+    box-shadow:0 0 0 3px rgba(var(--accent2-rgb),0.18);
+    animation:pulseTeal 1.8s ease-in-out infinite;
+  }
+  @keyframes pulseTeal{
+    0%,100%{box-shadow:0 0 0 0 rgba(var(--accent2-rgb),0.4);}
+    50%{box-shadow:0 0 0 5px rgba(var(--accent2-rgb),0);}
+  }
+ 
+  .preview{
+    position:relative;
+    width:100%;
+    height:300px;
+    overflow:hidden;
+    background:
+      repeating-linear-gradient(45deg, rgba(var(--accent-rgb),0.02) 0 10px, transparent 10px 20px);
+  }
+  .preview iframe{
+    position:absolute; top:0; left:0;
+    border:0; background:#fff;
+    transform-origin:top left;
+    pointer-events:none;
+    transition:filter 0.4s ease;
+    filter:saturate(0.92);
+  }
+  .card:hover .preview iframe{filter:saturate(1.05);}
+  .preview-link{
+    position:absolute; inset:0; z-index:2;
+    display:flex; align-items:flex-end; justify-content:flex-end;
+    padding:14px;
+    background:linear-gradient(180deg, transparent 60%, rgba(var(--bg-rgb),0.55));
+    opacity:0; transition:opacity 0.3s ease;
+  }
+  .preview:hover .preview-link{opacity:1;}
+  .preview-link span{
+    font-family:var(--ff-mono); font-size:12px;
+    background:var(--accent); color:#fff; font-weight:500;
+    padding:8px 12px; border-radius:7px;
+    transform:translateY(6px); opacity:0;
+    transition:transform 0.3s ease 0.05s, opacity 0.3s ease 0.05s;
+  }
+  .preview:hover .preview-link span{transform:translateY(0); opacity:1;}
+  .preview-fallback{
+    display:none;
+    height:300px; align-items:center; justify-content:center;
+    flex-direction:column; gap:10px; text-align:center; padding:24px;
+    font-family:var(--ff-mono); font-size:12.5px; color:var(--muted);
+  }
+  @media (max-width:560px){
+    .preview{display:none;}
+    .preview-fallback{display:flex;}
+  }
+ 
+  .card-body{padding:28px 30px; display:flex; flex-direction:column;}
+  .card-tag{font-family:var(--ff-mono); font-size:11.5px; color:var(--accent); letter-spacing:0.08em; text-transform:uppercase;}
+  .card-body h3{font-size:24px; margin-top:10px;}
+  .card-body h3 .native{display:block; font-size:15px; color:var(--muted); font-weight:400; margin-top:4px; font-family:var(--ff-body);}
+  .card-body p.desc{color:var(--muted); font-size:14.5px; margin-top:12px;}
+ 
+  .feature-list{list-style:none; margin:18px 0 0; padding:0; display:flex; flex-direction:column; gap:9px;}
+  .feature-list li{
+    font-size:13.5px; color:var(--text); display:flex; gap:10px; align-items:flex-start;
+    opacity:0; transform:translateX(-8px);
+    transition:opacity 0.5s ease, transform 0.5s ease;
+  }
+  html[dir="rtl"] .feature-list li{transform:translateX(8px);}
+  .card.in-view .feature-list li{opacity:1; transform:translateX(0);}
+  .card.in-view .feature-list li:nth-child(1){transition-delay:0.15s;}
+  .card.in-view .feature-list li:nth-child(2){transition-delay:0.25s;}
+  .card.in-view .feature-list li:nth-child(3){transition-delay:0.35s;}
+  .card.in-view .feature-list li:nth-child(4){transition-delay:0.45s;}
+  .feature-list li::before{
+    content:'→'; color:var(--accent2); font-family:var(--ff-mono); flex:none; margin-top:1px;
+  }
+ 
+  .card-foot{
+    margin-top:22px; padding-top:18px; border-top:1px solid var(--line);
+    display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;
+  }
+  .card-foot .visit{
+    font-family:var(--ff-mono); font-size:13px; color:var(--text);
+    display:flex; align-items:center; gap:8px; transition:color 0.2s, gap 0.2s;
+  }
+  .card-foot .visit:hover{color:var(--accent); gap:11px;}
+  .stack{display:flex; gap:6px; flex-wrap:wrap; direction:ltr;}
+  .stack span{
+    font-family:var(--ff-mono); font-size:10.5px; color:var(--muted);
+    border:1px solid var(--line); border-radius:5px; padding:3px 7px;
+    transition:border-color 0.2s, color 0.2s;
+  }
+  .card:hover .stack span{border-color:var(--line-strong); color:var(--text);}
+ 
+  /* ---------- ABOUT ---------- */
+  .about{padding:96px 0;}
+  .about-grid{display:grid; grid-template-columns:1fr 1fr; gap:56px; align-items:start;}
+  @media (max-width:820px){ .about-grid{grid-template-columns:1fr; gap:36px;} }
+  .about p.lead{font-size:16.5px; color:var(--text); margin-top:16px;}
+  .about p.lead + p{margin-top:14px; color:var(--muted); font-size:15px;}
+  .about-grid > div{
+    opacity:0; transform:translateY(24px);
+    transition:opacity 0.7s cubic-bezier(.22,1,.36,1), transform 0.7s cubic-bezier(.22,1,.36,1);
+  }
+  .about-grid.in-view > div{opacity:1; transform:translateY(0);}
+  .about-grid.in-view > div:nth-child(2){transition-delay:0.15s;}
+ 
+  .skills{display:flex; flex-direction:column; gap:0;}
+  .skills h4{font-family:var(--ff-mono); font-size:12px; color:var(--muted); letter-spacing:0.08em; text-transform:uppercase; margin-bottom:16px;}
+  html[dir="rtl"] .skills h4{letter-spacing:normal; text-transform:none;}
+  .skill-tags{display:flex; flex-wrap:wrap; gap:9px; margin-bottom:34px;}
+  .skill-tags span{
+    font-family:var(--ff-mono); font-size:12.5px; color:var(--text);
+    border:1px solid var(--line-strong); border-radius:7px; padding:7px 12px;
+    opacity:0; transform:translateY(10px) scale(0.94);
+    transition:opacity 0.45s ease, transform 0.45s cubic-bezier(.34,1.56,.64,1), border-color 0.2s, background 0.2s;
+  }
+  .about-grid.in-view .skill-tags span{opacity:1; transform:translateY(0) scale(1);}
+  .skill-tags span:nth-child(1){transition-delay:0.05s;}
+  .skill-tags span:nth-child(2){transition-delay:0.11s;}
+  .skill-tags span:nth-child(3){transition-delay:0.17s;}
+  .skill-tags span:nth-child(4){transition-delay:0.23s;}
+  .skill-tags span:nth-child(5){transition-delay:0.29s;}
+  .skill-tags span:nth-child(6){transition-delay:0.35s;}
+  .skill-tags span:nth-child(7){transition-delay:0.41s;}
+  .skill-tags span:hover{border-color:var(--accent); background:rgba(var(--accent-rgb),0.08); transform:translateY(-2px) scale(1.03);}
+ 
+  .process{display:flex; flex-direction:column; gap:16px;}
+  .process-step{
+    display:flex; gap:16px; align-items:flex-start;
+    opacity:0; transform:translateX(16px);
+    transition:opacity 0.5s ease, transform 0.5s cubic-bezier(.22,1,.36,1);
+  }
+  html[dir="rtl"] .process-step{transform:translateX(-16px);}
+  .about-grid.in-view .process-step{opacity:1; transform:translateX(0);}
+  .about-grid.in-view .process-step:nth-child(2){transition-delay:0.55s;}
+  .about-grid.in-view .process-step:nth-child(3){transition-delay:0.7s;}
+  .about-grid.in-view .process-step:nth-child(4){transition-delay:0.85s;}
+  .process-step .num{
+    font-family:var(--ff-mono); font-size:12px; color:var(--accent);
+    border:1px solid var(--line-strong); border-radius:50%;
+    width:26px; height:26px; display:flex; align-items:center; justify-content:center;
+    flex:none; margin-top:2px; transition:border-color 0.2s, box-shadow 0.2s;
+  }
+  .process-step:hover .num{border-color:var(--accent); box-shadow:0 0 0 4px rgba(var(--accent-rgb),0.12);}
+  .process-step h5{font-family:var(--ff-body); font-size:14.5px; font-weight:600; margin-bottom:3px; color:var(--text);}
+  .process-step p{font-size:13.5px; color:var(--muted);}
+ 
+  /* ---------- CONTACT ---------- */
+  .contact{padding:30px 0 96px;}
+  .contact-panel{
+    border:1px solid var(--line-strong); border-radius:var(--radius);
+    padding:52px 44px;
+    background:
+      radial-gradient(700px 260px at var(--cx,90%) 0%, rgba(var(--accent-rgb),0.10), transparent 60%),
+      var(--panel);
+    text-align:center;
+    position:relative; overflow:hidden;
+    opacity:0; transform:translateY(24px);
+    transition:opacity 0.7s cubic-bezier(.22,1,.36,1), transform 0.7s cubic-bezier(.22,1,.36,1), background 0.4s ease;
+    animation:glowDrift 8s ease-in-out infinite;
+  }
+  .contact-panel.in-view{opacity:1; transform:translateY(0);}
+  @keyframes glowDrift{
+    0%,100%{ --cx:90%; }
+    50%{ --cx:10%; }
+  }
+  .contact-panel h2{font-size:clamp(26px,3.6vw,38px); max-width:20ch; margin:16px auto 14px;}
+  .contact-panel p{color:var(--muted); max-width:46ch; margin:0 auto 30px; font-size:15.5px;}
+  .contact-actions{display:flex; gap:14px; justify-content:center; flex-wrap:wrap;}
+ 
+  /* ---------- FOOTER ---------- */
+  footer{border-top:1px solid var(--line); padding:28px 0; transition:border-color 0.4s ease;}
+  .foot-inner{
+    display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;
+    font-family:var(--ff-mono); font-size:12px; color:var(--muted);
+  }
+  .foot-inner a{position:relative; padding-bottom:2px; direction:ltr;}
+  .foot-inner a::after{
+    content:''; position:absolute; left:0; bottom:0; width:0; height:1px; background:var(--accent2);
+    transition:width 0.25s ease;
+  }
+  .foot-inner a:hover{color:var(--text);}
+  .foot-inner a:hover::after{width:100%;}
+</style>
+</head>
+<body>
+ 
+<div class="progress" id="progress"></div>
+<div class="grid-bg" aria-hidden="true"></div>
+ 
+<header class="nav">
+  <div class="nav-inner">
+    <a class="logo" href="#home">
+      <span class="mark">YE</span>
+      Yassin Ehab
+    </a>
+    <nav class="nav-links">
+      <a href="#work" data-i18n="nav_work">Work</a>
+      <a href="#about" data-i18n="nav_about">About</a>
+      <a href="#contact" data-i18n="nav_contact">Contact</a>
+    </nav>
+    <div class="nav-cta">
+      <button class="btn btn-ghost" id="lang-toggle" type="button" aria-label="Switch language">العربية</button>
+      <a class="btn btn-solid" href="#contact" data-i18n="nav_cta">Start a project</a>
+    </div>
+  </div>
+</header>
+ 
+<main>
+ 
+  <!-- HERO -->
+  <section id="home" class="hero">
+    <div class="wrap">
+      <div class="eyebrow load-anim" style="animation-delay:0.05s;" data-i18n="hero_eyebrow">FRONT-END &amp; WEB DEVELOPER · EGYPT</div>
+      <h1 class="load-anim" style="animation-delay:0.15s;"><span data-i18n="hero_h1_prefix">Websites that actually</span> <em id="rotator">get used.<span class="caret"></span></em></h1>
+      <p class="hero-sub load-anim" style="animation-delay:0.28s;" data-i18n="hero_sub">
+        I build fast, bilingual, functional sites and small web apps for real businesses
+        and real events — not a template with your logo dropped in. Every project below
+        is the live site, running right on this page.
+      </p>
+      <div class="hero-actions load-anim" style="animation-delay:0.4s;">
+        <a class="btn btn-solid" href="#work" data-i18n="hero_btn1">See the work</a>
+        <a class="btn" href="#contact" data-i18n="hero_btn2">Start a project →</a>
+      </div>
+ 
+      <div class="proof load-anim" style="animation-delay:0.52s;">
+        <div>
+          <div class="proof-label" data-i18n="proof_label1">// this clock is live, right now</div>
+          <div class="proof-clock">
+            <span id="clock">--:--:--</span>
+            <span class="date" id="clock-date">loading date…</span>
+          </div>
+          <div class="proof-toggle-row">
+            <span class="tag" data-i18n="proof_theme_label">Theme</span>
+            <button class="switch" id="theme-switch" role="switch" aria-checked="false" aria-pressed="false" aria-label="Switch between dark mode and light mode">
+              <span class="knob"></span>
+            </button>
+            <span class="tag" id="switch-state">dark</span>
+          </div>
+        </div>
+        <div class="proof-divider" aria-hidden="true"></div>
+        <div class="proof-right">
+          <div class="proof-label" data-i18n="proof_label2">// why this matters to you</div>
+          <span class="note" data-i18n="proof_note">This whole page is built by hand — the clock, the light/dark switch,
+the animations as you scroll. Nothing here is a stock template.
+That's the same care that goes into every site I build.</span>
+        </div>
+      </div>
+    </div>
+ 
+    <div class="marquee-strip" aria-hidden="true">
+      <div class="marquee-track" id="marquee">
+        <span data-i18n="marquee_1">Available for freelance work</span>
+        <span data-i18n="marquee_2">Bilingual RTL / LTR builds</span>
+        <span data-i18n="marquee_3">Fast turnaround</span>
+        <span data-i18n="marquee_4">HTML · CSS · JS, no bloat</span>
+        <span data-i18n="marquee_1">Available for freelance work</span>
+        <span data-i18n="marquee_2">Bilingual RTL / LTR builds</span>
+        <span data-i18n="marquee_3">Fast turnaround</span>
+        <span data-i18n="marquee_4">HTML · CSS · JS, no bloat</span>
+      </div>
+    </div>
+  </section>
+ 
+  <!-- WORK -->
+  <section id="work" class="work">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="eyebrow" data-i18n="work_eyebrow">SELECTED WORK</div>
+        <h2 data-i18n="work_h2">Four briefs, four different problems to solve.</h2>
+        <p data-i18n="work_p">Each card below embeds the actual deployed site — scroll, click through, or open it full-size.</p>
+        <div class="rule"></div>
+      </div>
+ 
+      <div class="cards">
+ 
+        <!-- CARD 1: Restaurant -->
+        <article class="card">
+          <div class="card-preview-wrap">
+            <div class="chrome">
+              <div class="dots"><span></span><span></span><span></span></div>
+              <div class="url">yassinehab-egy.github.io/El-masry-res</div>
+              <div class="live-dot">LIVE</div>
+            </div>
+            <div class="preview" data-src="https://yassinehab-egy.github.io/El-masry-res/" data-inner-width="1280">
+              <iframe title="مطعم المصري live preview" src="https://yassinehab-egy.github.io/El-masry-res/" loading="lazy"></iframe>
+              <a class="preview-link" href="https://yassinehab-egy.github.io/El-masry-res/" target="_blank" rel="noopener"><span>Open full site ↗</span></a>
+            </div>
+            <div class="preview-fallback">
+              Live preview shown on larger screens.
+              <a class="btn" href="https://yassinehab-egy.github.io/El-masry-res/" target="_blank" rel="noopener">Open site ↗</a>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="card-tag" data-i18n="card1_tag">Local Restaurant · Arabic / RTL</div>
+            <h3>مطعم المصري
+              <span class="native">El Masry Restaurant, Obour City</span>
+            </h3>
+            <p class="desc" data-i18n="card1_desc">
+              A restaurant site built right-to-left in Arabic from the ground up, not translated
+              after the fact — so layout, icons, and reading order all work the way an Arabic
+              visitor actually expects.
+            </p>
+            <ul class="feature-list">
+              <li data-i18n="card1_f1">Native RTL layout with Arabic typography</li>
+              <li data-i18n="card1_f2">Tap-to-call with one-tap number copy</li>
+              <li data-i18n="card1_f3">Direct Google Maps directions link</li>
+              <li data-i18n="card1_f4">Rating, delivery, and dine-in info up front</li>
+            </ul>
+            <div class="card-foot">
+              <a class="visit" href="https://yassinehab-egy.github.io/El-masry-res/" target="_blank" rel="noopener" data-i18n="visit_link">Visit live site ↗</a>
+              <div class="stack"><span>HTML</span><span>CSS</span><span>JS</span><span>RTL</span></div>
+            </div>
+          </div>
+        </article>
+ 
+        <!-- CARD 2: Dashboard -->
+        <article class="card">
+          <div class="card-preview-wrap">
+            <div class="chrome">
+              <div class="dots"><span></span><span></span><span></span></div>
+              <div class="url">yassinehab-egy.github.io/personal-dashb</div>
+              <div class="live-dot">LIVE</div>
+            </div>
+            <div class="preview" data-src="https://yassinehab-egy.github.io/personal-dashb/" data-inner-width="1280">
+              <iframe title="Personal Dashboard live preview" src="https://yassinehab-egy.github.io/personal-dashb/" loading="lazy"></iframe>
+              <a class="preview-link" href="https://yassinehab-egy.github.io/personal-dashb/" target="_blank" rel="noopener"><span>Open full site ↗</span></a>
+            </div>
+            <div class="preview-fallback">
+              Live preview shown on larger screens.
+              <a class="btn" href="https://yassinehab-egy.github.io/personal-dashb/" target="_blank" rel="noopener">Open site ↗</a>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="card-tag" data-i18n="card2_tag">Personal Web App</div>
+            <h3>Personal Dashboard
+              <span class="native">A daily-use tool, built to actually use daily</span>
+            </h3>
+            <p class="desc" data-i18n="card2_desc">
+              A self-initiated project — a home-base page combining the small tools I actually
+              wanted in one tab: time, weather, tasks, and quick links, instead of ten different apps.
+            </p>
+            <ul class="feature-list">
+              <li data-i18n="card2_f1">Live clock, date, and city weather lookup</li>
+              <li data-i18n="card2_f2">Alarm and a start / pause / reset timer</li>
+              <li data-i18n="card2_f3">Quick links and a daily focus task list</li>
+              <li data-i18n="card2_f4">Dark mode and a mini AI text assistant</li>
+            </ul>
+            <div class="card-foot">
+              <a class="visit" href="https://yassinehab-egy.github.io/personal-dashb/" target="_blank" rel="noopener" data-i18n="visit_link">Visit live site ↗</a>
+              <div class="stack"><span>HTML</span><span>CSS</span><span>JS</span><span>Web APIs</span></div>
+            </div>
+          </div>
+        </article>
+ 
+        <!-- CARD 3: Wedding -->
+        <article class="card">
+          <div class="card-preview-wrap">
+            <div class="chrome">
+              <div class="dots"><span></span><span></span><span></span></div>
+              <div class="url">yassinehab-egy.github.io/wedding-sh</div>
+              <div class="live-dot">LIVE</div>
+            </div>
+            <div class="preview" data-src="https://yassinehab-egy.github.io/wedding-sh/" data-inner-width="1280">
+              <iframe title="Wedding invitation live preview" src="https://yassinehab-egy.github.io/wedding-sh/" loading="lazy"></iframe>
+              <a class="preview-link" href="https://yassinehab-egy.github.io/wedding-sh/" target="_blank" rel="noopener"><span>Open full site ↗</span></a>
+            </div>
+            <div class="preview-fallback">
+              Live preview shown on larger screens.
+              <a class="btn" href="https://yassinehab-egy.github.io/wedding-sh/" target="_blank" rel="noopener">Open site ↗</a>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="card-tag" data-i18n="card3_tag">Client Project · Bilingual RSVP</div>
+            <h3>Royal Decree
+              <span class="native">A custom wedding invitation &amp; RSVP</span>
+            </h3>
+            <p class="desc" data-i18n="card3_desc">
+              Delivered for a real client's wedding at an affordable price — proof that "cheap"
+              doesn't have to mean "basic." A wax-seal open animation leads into a full
+              English / Arabic invitation.
+            </p>
+            <ul class="feature-list">
+              <li data-i18n="card3_f1">English / Arabic language toggle</li>
+              <li data-i18n="card3_f2">Live countdown to the event, day by day</li>
+              <li data-i18n="card3_f3">One-click "add to calendar" and directions</li>
+              <li data-i18n="card3_f4">Built-in RSVP with attend / decline + message</li>
+            </ul>
+            <div class="card-foot">
+              <a class="visit" href="https://yassinehab-egy.github.io/wedding-sh/" target="_blank" rel="noopener" data-i18n="visit_link">Visit live site ↗</a>
+              <div class="stack"><span>HTML</span><span>CSS</span><span>JS</span><span>i18n</span></div>
+            </div>
+          </div>
+        </article>
+ 
+        <!-- CARD 4: Restaurant concept model -->
+        <article class="card">
+          <div class="card-preview-wrap">
+            <div class="chrome">
+              <div class="dots"><span></span><span></span><span></span></div>
+              <div class="url">yassinehab-egy.github.io/rest-model</div>
+              <div class="live-dot">LIVE</div>
+            </div>
+            <div class="preview" data-src="https://yassinehab-egy.github.io/rest-model/" data-inner-width="1280">
+              <iframe title="Bayt virtual model live preview" src="https://yassinehab-egy.github.io/rest-model/" loading="lazy"></iframe>
+              <a class="preview-link" href="https://yassinehab-egy.github.io/rest-model/" target="_blank" rel="noopener"><span>Open full site ↗</span></a>
+            </div>
+            <div class="preview-fallback">
+              Live preview shown on larger screens.
+              <a class="btn" href="https://yassinehab-egy.github.io/rest-model/" target="_blank" rel="noopener">Open site ↗</a>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="card-tag" data-i18n="card4_tag">Restaurant Concept · Trust-Building Demo</div>
+            <h3>Bayt بيت
+              <span class="native">A concept restaurant, built to earn trust</span>
+            </h3>
+            <p class="desc" data-i18n="card4_desc">
+              Built proactively, not for a paying client yet — a full concept site to show a
+              restaurant owner exactly what their online presence could look like before they
+              commit to anything. The name and menu are placeholders; the craft isn't.
+            </p>
+            <ul class="feature-list">
+              <li data-i18n="card4_f1">Scroll-driven story section with animated stats</li>
+              <li data-i18n="card4_f2">Five-course "tasting journey" showcase layout</li>
+              <li data-i18n="card4_f3">Photo gallery, guest reviews, and ambiance sections</li>
+              <li data-i18n="card4_f4">Built-in table reservation form with guest count</li>
+            </ul>
+            <div class="card-foot">
+              <a class="visit" href="https://yassinehab-egy.github.io/rest-model/" target="_blank" rel="noopener" data-i18n="visit_link">Visit live site ↗</a>
+              <div class="stack"><span>HTML</span><span>CSS</span><span>JS</span><span>i18n</span></div>
+            </div>
+          </div>
+        </article>
+ 
+      </div>
+    </div>
+  </section>
+ 
+  <!-- ABOUT -->
+  <section id="about" class="about">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="eyebrow" data-i18n="about_eyebrow">ABOUT</div>
+        <h2 data-i18n="about_h2">Built by hand, one project at a time.</h2>
+        <div class="rule"></div>
+      </div>
+      <div class="about-grid">
+        <div>
+          <p class="lead" data-i18n="about_lead">
+            I'm Yassin Ehab, a front-end and web developer based in Egypt. I write HTML,
+            CSS, and JavaScript directly — no page-builder, no bloated framework where a
+            script tag will do — so sites stay fast and easy to hand off.
+          </p>
+          <p data-i18n="about_p2">
+            I've built for a restaurant that needed an Arabic-first site, for myself when
+            I wanted a better daily dashboard, and for a couple who needed a wedding
+            invitation that felt custom without a custom-size budget. Different briefs,
+            same standard: it has to actually work for the person using it.
+          </p>
+        </div>
+ 
+        <div>
+          <div class="skills">
+            <h4 data-i18n="skills_h4">What I work with</h4>
+            <div class="skill-tags">
+              <span>HTML5</span>
+              <span>CSS3 (Grid &amp; Flexbox)</span>
+              <span>JavaScript (DOM &amp; APIs)</span>
+              <span data-i18n="skill_responsive">Responsive design</span>
+              <span data-i18n="skill_bilingual">Bilingual RTL / LTR builds</span>
+              <span data-i18n="skill_animation">Animation &amp; micro-interactions</span>
+              <span>Git &amp; GitHub Pages</span>
+            </div>
+          </div>
+ 
+          <div class="process">
+            <h4 style="font-family:var(--ff-mono); font-size:12px; color:var(--muted); letter-spacing:0.08em; text-transform:uppercase; margin-bottom:2px;" data-i18n="process_h4">How a project runs</h4>
+            <div class="process-step">
+              <div class="num">1</div>
+              <div><h5 data-i18n="step1_title">Brief</h5><p data-i18n="step1_desc">We talk through what the site needs to do, for who, and by when.</p></div>
+            </div>
+            <div class="process-step">
+              <div class="num">2</div>
+              <div><h5 data-i18n="step2_title">Build</h5><p data-i18n="step2_desc">I build it in HTML/CSS/JS and send progress, not just a final reveal.</p></div>
+            </div>
+            <div class="process-step">
+              <div class="num">3</div>
+              <div><h5 data-i18n="step3_title">Launch</h5><p data-i18n="step3_desc">You get the live link, the files, and a walkthrough of how to update it.</p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+ 
+  <!-- CONTACT -->
+  <section id="contact" class="contact">
+    <div class="wrap">
+      <div class="contact-panel">
+        <div class="eyebrow" style="justify-content:center;" data-i18n="contact_eyebrow">GET IN TOUCH</div>
+        <h2 data-i18n="contact_h2">Have a project in mind?</h2>
+        <p data-i18n="contact_p">Tell me what you're building — a business site, an event page, a small tool — and I'll get back to you with what it'd take.</p>
+        <div class="contact-actions">
+          <a class="btn btn-solid" href="https://wa.me/201055474102" target="_blank" rel="noopener" data-i18n="contact_whatsapp">Message on WhatsApp</a>
+          <a class="btn" href="mailto:Yassinehab080@gmail.com" style="direction:ltr;">Yassinehab080@gmail.com</a>
+        </div>
+      </div>
+    </div>
+  </section>
+ 
+</main>
+ 
+<footer>
+  <div class="wrap foot-inner">
+    <span>© <span id="year">2026</span> <span data-i18n="footer_text">Yassin Ehab. Built with HTML, CSS &amp; JS.</span></span>
+    <a href="https://github.com/yassinehab-egy" target="_blank" rel="noopener">github.com/yassinehab-egy</a>
+  </div>
+</footer>
+ 
+<script>
+  // ---- translations ----
+  const dict = {
+    en: {
+      nav_work:"Work", nav_about:"About", nav_contact:"Contact", nav_cta:"Start a project",
+      hero_eyebrow:"FRONT-END & WEB DEVELOPER · EGYPT",
+      hero_h1_prefix:"Websites that actually",
+      hero_sub:"I build fast, bilingual, functional sites and small web apps for real businesses and real events — not a template with your logo dropped in. Every project below is the live site, running right on this page.",
+      hero_btn1:"See the work", hero_btn2:"Start a project →",
+      proof_label1:"// this clock is live, right now",
+      proof_theme_label:"Theme",
+      proof_label2:"// why this matters to you",
+      proof_note:"This whole page is built by hand — the clock, the light/dark switch, the animations as you scroll. Nothing here is a stock template. That's the same care that goes into every site I build.",
+      theme_dark:"dark", theme_light:"light",
+      switch_aria:"Switch between dark mode and light mode",
+      marquee_1:"Available for freelance work", marquee_2:"Bilingual RTL / LTR builds",
+      marquee_3:"Fast turnaround", marquee_4:"HTML · CSS · JS, no bloat",
+      work_eyebrow:"SELECTED WORK",
+      work_h2:"Four briefs, four different problems to solve.",
+      work_p:"Each card below embeds the actual deployed site — scroll, click through, or open it full-size.",
+      card1_tag:"Local Restaurant · Arabic / RTL",
+      card1_desc:"A restaurant site built right-to-left in Arabic from the ground up, not translated after the fact — so layout, icons, and reading order all work the way an Arabic visitor actually expects.",
+      card1_f1:"Native RTL layout with Arabic typography",
+      card1_f2:"Tap-to-call with one-tap number copy",
+      card1_f3:"Direct Google Maps directions link",
+      card1_f4:"Rating, delivery, and dine-in info up front",
+      card2_tag:"Personal Web App",
+      card2_desc:"A self-initiated project — a home-base page combining the small tools I actually wanted in one tab: time, weather, tasks, and quick links, instead of ten different apps.",
+      card2_f1:"Live clock, date, and city weather lookup",
+      card2_f2:"Alarm and a start / pause / reset timer",
+      card2_f3:"Quick links and a daily focus task list",
+      card2_f4:"Dark mode and a mini AI text assistant",
+      card3_tag:"Client Project · Bilingual RSVP",
+      card3_desc:"Delivered for a real client's wedding at an affordable price — proof that \"cheap\" doesn't have to mean \"basic.\" A wax-seal open animation leads into a full English / Arabic invitation.",
+      card3_f1:"English / Arabic language toggle",
+      card3_f2:"Live countdown to the event, day by day",
+      card3_f3:"One-click \"add to calendar\" and directions",
+      card3_f4:"Built-in RSVP with attend / decline + message",
+      card4_tag:"Restaurant Concept · Trust-Building Demo",
+      card4_desc:"Built proactively, not for a paying client yet — a full concept site to show a restaurant owner exactly what their online presence could look like before they commit to anything. The name and menu are placeholders; the craft isn't.",
+      card4_f1:"Scroll-driven story section with animated stats",
+      card4_f2:"Five-course \"tasting journey\" showcase layout",
+      card4_f3:"Photo gallery, guest reviews, and ambiance sections",
+      card4_f4:"Built-in table reservation form with guest count",
+      visit_link:"Visit live site ↗",
+      about_eyebrow:"ABOUT",
+      about_h2:"Built by hand, one project at a time.",
+      about_lead:"I'm Yassin Ehab, a front-end and web developer based in Egypt. I write HTML, CSS, and JavaScript directly — no page-builder, no bloated framework where a script tag will do — so sites stay fast and easy to hand off.",
+      about_p2:"I've built for a restaurant that needed an Arabic-first site, for myself when I wanted a better daily dashboard, and for a couple who needed a wedding invitation that felt custom without a custom-size budget. Different briefs, same standard: it has to actually work for the person using it.",
+      skills_h4:"What I work with",
+      skill_responsive:"Responsive design",
+      skill_bilingual:"Bilingual RTL / LTR builds",
+      skill_animation:"Animation & micro-interactions",
+      process_h4:"How a project runs",
+      step1_title:"Brief", step1_desc:"We talk through what the site needs to do, for who, and by when.",
+      step2_title:"Build", step2_desc:"I build it in HTML/CSS/JS and send progress, not just a final reveal.",
+      step3_title:"Launch", step3_desc:"You get the live link, the files, and a walkthrough of how to update it.",
+      contact_eyebrow:"GET IN TOUCH",
+      contact_h2:"Have a project in mind?",
+      contact_p:"Tell me what you're building — a business site, an event page, a small tool — and I'll get back to you with what it'd take.",
+      contact_whatsapp:"Message on WhatsApp",
+      footer_text:"Yassin Ehab. Built with HTML, CSS & JS."
+    },
+    ar: {
+      nav_work:"الأعمال", nav_about:"نبذة", nav_contact:"تواصل", nav_cta:"ابدأ مشروعك",
+      hero_eyebrow:"مطوّر واجهات ومواقع · مصر",
+      hero_h1_prefix:"مواقع إلكترونية",
+      hero_sub:"أبني مواقع سريعة، ثنائية اللغة، وفعلية الاستخدام لأصحاب الأعمال والمناسبات الحقيقية — لا قوالب جاهزة بشعارك فوقها. كل مشروع أدناه هو الموقع الفعلي، يعمل مباشرة على هذه الصفحة.",
+      hero_btn1:"شاهد الأعمال", hero_btn2:"ابدأ مشروعك ←",
+      proof_label1:"// هذه الساعة تعمل الآن فعليًا",
+      proof_theme_label:"الوضع",
+      proof_label2:"// لماذا يهمك هذا",
+      proof_note:"هذه الصفحة بأكملها مبنية يدويًا — الساعة، مفتاح الوضع الداكن والفاتح، والحركات أثناء التمرير. لا شيء هنا قالب جاهز. وهذا نفس الاهتمام الذي يدخل في كل موقع أبنيه.",
+      theme_dark:"داكن", theme_light:"فاتح",
+      switch_aria:"التبديل بين الوضع الداكن والفاتح",
+      marquee_1:"متاح للعمل الحر", marquee_2:"مواقع ثنائية اللغة (عربي وإنجليزي)",
+      marquee_3:"تسليم سريع", marquee_4:"HTML · CSS · JS، بلا تعقيد",
+      work_eyebrow:"أعمال مختارة",
+      work_h2:"أربع مهام، وأربع مشكلات مختلفة تم حلها.",
+      work_p:"كل بطاقة أدناه تعرض الموقع الفعلي المنشور — مرّر، اضغط، أو افتحه بالحجم الكامل.",
+      card1_tag:"مطعم محلي · عربي / RTL",
+      card1_desc:"موقع مطعم مبني من الأساس باللغة العربية ومن اليمين لليسار، وليس مترجمًا لاحقًا — بحيث يعمل التخطيط والأيقونات وترتيب القراءة كما يتوقعه الزائر العربي فعلاً.",
+      card1_f1:"تخطيط RTL أصلي بخط عربي مناسب",
+      card1_f2:"اتصال بضغطة واحدة ونسخ الرقم بسهولة",
+      card1_f3:"رابط مباشر لموقع المطعم على خرائط جوجل",
+      card1_f4:"التقييم وخيارات التوصيل والحضور في مقدمة الصفحة",
+      card2_tag:"تطبيق ويب شخصي",
+      card2_desc:"مشروع شخصي بدأته بنفسي — صفحة رئيسية تجمع الأدوات الصغيرة التي كنت أحتاجها فعلاً في تبويب واحد: الوقت، الطقس، المهام، والروابط السريعة، بدلاً من عشرة تطبيقات منفصلة.",
+      card2_f1:"ساعة وتاريخ مباشر وبحث عن طقس أي مدينة",
+      card2_f2:"منبه ومؤقّت بتشغيل وإيقاف وإعادة ضبط",
+      card2_f3:"روابط سريعة وقائمة مهام يومية",
+      card2_f4:"وضع داكن ومساعد ذكاء اصطناعي مصغّر للنصوص",
+      card3_tag:"مشروع لعميل · دعوة ثنائية اللغة",
+      card3_desc:"تم تسليمه لحفل زفاف عميل حقيقي بسعر مناسب — دليل على أن السعر المنخفض لا يعني تصميمًا بسيطًا. حركة فتح الختم الشمعي تقود إلى دعوة كاملة بالعربية والإنجليزية.",
+      card3_f1:"زر تبديل بين العربية والإنجليزية",
+      card3_f2:"عدّاد تنازلي مباشر حتى موعد الحفل",
+      card3_f3:"إضافة للتقويم والوصول للموقع بضغطة واحدة",
+      card3_f4:"تأكيد حضور مدمج مع خيار الاعتذار وإرسال رسالة",
+      card4_tag:"مفهوم مطعم · نموذج لبناء الثقة",
+      card4_desc:"بُني بمبادرة شخصية، وليس لعميل فعلي بعد — موقع مفهوم كامل ليُري صاحب مطعم كيف يمكن أن يبدو حضوره الإلكتروني قبل أن يلتزم بأي شيء. الاسم والقائمة مجرد نماذج، لكن الصنعة حقيقية.",
+      card4_f1:"قسم قصة بتأثير التمرير وإحصائيات متحركة",
+      card4_f2:"عرض \"رحلة تذوق\" من خمسة أطباق",
+      card4_f3:"معرض صور وآراء ضيوف وأقسام أجواء المكان",
+      card4_f4:"نموذج حجز طاولة مدمج مع عدد الضيوف",
+      visit_link:"زيارة الموقع المباشر ↗",
+      about_eyebrow:"نبذة",
+      about_h2:"مبني يدويًا، مشروعًا تلو الآخر.",
+      about_lead:"أنا ياسين إيهاب، مطوّر واجهات ومواقع مقيم في مصر. أكتب HTML وCSS وJavaScript مباشرة — بلا أدوات بناء جاهزة، وبلا مكتبات ثقيلة حين يكفي سطر كود بسيط — لتبقى المواقع سريعة وسهلة التسليم.",
+      about_p2:"بنيت موقعًا لمطعم احتاج لواجهة عربية أولًا، وبنيت لوحة تحكم يومية لنفسي حين أردت واحدة أفضل، وبنيت دعوة زفاف لعروسين أرادا تصميمًا مخصصًا دون ميزانية كبيرة. مهام مختلفة، لكن المعيار واحد: أن يعمل الموقع فعلاً لمن يستخدمه.",
+      skills_h4:"الأدوات التي أعمل بها",
+      skill_responsive:"تصميم متجاوب",
+      skill_bilingual:"مواقع ثنائية اللغة (عربي/إنجليزي)",
+      skill_animation:"حركات وتفاعلات دقيقة",
+      process_h4:"كيف يسير المشروع",
+      step1_title:"الفهم", step1_desc:"نتحدث عمّا يحتاجه الموقع، ولمن، وفي أي وقت.",
+      step2_title:"البناء", step2_desc:"أبنيه بلغات HTML وCSS وJS، وأطلعك على التقدم أولًا بأول.",
+      step3_title:"الإطلاق", step3_desc:"تحصل على الرابط المباشر، والملفات، وشرح لكيفية تحديث الموقع.",
+      contact_eyebrow:"تواصل معي",
+      contact_h2:"عندك مشروع في بالك؟",
+      contact_p:"أخبرني بما تريد بناءه — موقع لعملك، صفحة لمناسبة، أو أداة صغيرة — وسأرد عليك بما يتطلبه الأمر.",
+      contact_whatsapp:"راسلني على واتساب",
+      footer_text:"ياسين إيهاب. تم البناء بلغات HTML وCSS وJS."
+    }
+  };
+ 
+  const words = {
+    en: ['get used.', 'get booked.', 'get remembered.'],
+    ar: ['تُستخدم فعلاً.', 'تُحجز باستمرار.', 'لا تُنسى.']
+  };
+ 
+  let currentLang = 'en';
+  const root = document.documentElement;
+  const langToggle = document.getElementById('lang-toggle');
+  const rotator = document.getElementById('rotator');
+ 
+  function applyTranslations(){
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.getAttribute('data-i18n');
+      const val = dict[currentLang][key];
+      if(val !== undefined) el.textContent = val;
+    });
+  }
+ 
+  function applyLanguage(lang){
+    currentLang = lang;
+    root.setAttribute('lang', lang);
+    root.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
+    langToggle.textContent = lang === 'ar' ? 'English' : 'العربية';
+    applyTranslations();
+    updateSwitchLabel();
+    startTypewriter();
+  }
+ 
+  langToggle.addEventListener('click', () => {
+    const next = currentLang === 'en' ? 'ar' : 'en';
+    applyLanguage(next);
+    try{ localStorage.setItem('ye-lang', next); }catch(e){}
+  });
+ 
+  // ---- theme: real light/dark switch, remembered next visit ----
+  const sw = document.getElementById('theme-switch');
+  const swState = document.getElementById('switch-state');
+ 
+  function updateSwitchLabel(){
+    const theme = root.getAttribute('data-theme');
+    swState.textContent = theme === 'light' ? dict[currentLang].theme_light : dict[currentLang].theme_dark;
+    sw.setAttribute('aria-label', dict[currentLang].switch_aria);
+  }
+ 
+  function applyTheme(theme){
+    root.setAttribute('data-theme', theme);
+    const isLight = theme === 'light';
+    sw.setAttribute('aria-pressed', String(isLight));
+    sw.setAttribute('aria-checked', String(isLight));
+    updateSwitchLabel();
+  }
+ 
+  let savedTheme = 'dark';
+  try{ savedTheme = localStorage.getItem('ye-theme') || 'dark'; }catch(e){}
+  applyTheme(savedTheme);
+ 
+  sw.addEventListener('click', () => {
+    const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    applyTheme(next);
+    try{ localStorage.setItem('ye-theme', next); }catch(e){}
+  });
+ 
+  // ---- scroll progress bar ----
+  const progressEl = document.getElementById('progress');
+  function updateProgress(){
+    const h = document.documentElement;
+    const scrolled = (h.scrollTop) / (h.scrollHeight - h.clientHeight) * 100;
+    progressEl.style.width = scrolled + '%';
+  }
+  document.addEventListener('scroll', updateProgress, { passive:true });
+  updateProgress();
+ 
+  // ---- live clock (with a tick-pulse animation each second) ----
+  const clockEl = document.getElementById('clock');
+  const dateEl = document.getElementById('clock-date');
+  function tick(){
+    const now = new Date();
+    clockEl.textContent = now.toLocaleTimeString('en-GB', { hour12:false });
+    const locale = currentLang === 'ar' ? 'ar-EG-u-nu-latn' : 'en-US';
+    dateEl.textContent = now.toLocaleDateString(locale, { weekday:'short', year:'numeric', month:'short', day:'numeric' });
+    clockEl.classList.remove('tick');
+    void clockEl.offsetWidth; // restart animation
+    clockEl.classList.add('tick');
+  }
+  tick();
+  setInterval(tick, 1000);
+ 
+  // ---- hero cursor-follow glow ----
+  const hero = document.querySelector('.hero');
+  hero.addEventListener('mousemove', (e) => {
+    const rect = hero.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width) * 100;
+    const y = ((e.clientY - rect.top) / rect.height) * 100;
+    hero.style.setProperty('--mx', x + '%');
+    hero.style.setProperty('--my', y + '%');
+  });
+ 
+  // ---- typewriter headline rotator (language-aware, restarts cleanly on switch) ----
+  let langVersion = 0;
+  function startTypewriter(){
+    langVersion++;
+    const myVersion = langVersion;
+    let wi = 0, ci = 0, deleting = false;
+    rotator.childNodes[0].nodeValue = '';
+    function loop(){
+      if(myVersion !== langVersion) return;
+      const list = words[currentLang];
+      const word = list[wi];
+      ci += deleting ? -1 : 1;
+      rotator.childNodes[0].nodeValue = word.slice(0, ci);
+      let delay = deleting ? 40 : 80;
+      if(!deleting && ci === word.length){ delay = 1400; deleting = true; }
+      else if(deleting && ci === 0){ deleting = false; wi = (wi + 1) % list.length; delay = 300; }
+      setTimeout(loop, delay);
+    }
+    setTimeout(loop, 900);
+  }
+ 
+  // ---- footer year ----
+  document.getElementById('year').textContent = new Date().getFullYear();
+ 
+  // ---- scale embedded live previews to fit their card ----
+  function fitPreviews(){
+    document.querySelectorAll('.preview').forEach(el => {
+      const iframe = el.querySelector('iframe');
+      if(!iframe) return;
+      const innerWidth = parseInt(el.dataset.innerWidth, 10) || 1280;
+      const containerWidth = el.clientWidth;
+      const scale = containerWidth / innerWidth;
+      const innerHeight = el.clientHeight / scale;
+      iframe.style.width = innerWidth + 'px';
+      iframe.style.height = innerHeight + 'px';
+      iframe.style.transform = 'scale(' + scale + ')';
+    });
+  }
+  window.addEventListener('resize', fitPreviews);
+  window.addEventListener('load', fitPreviews);
+  fitPreviews();
+ 
+  // ---- generic scroll reveal ----
+  if('IntersectionObserver' in window){
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if(entry.isIntersecting){
+          entry.target.classList.add('in-view');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+ 
+    document.querySelectorAll('.card, .section-head, .about-grid, .contact-panel')
+      .forEach(el => io.observe(el));
+  } else {
+    document.querySelectorAll('.card, .section-head, .about-grid, .contact-panel')
+      .forEach(el => el.classList.add('in-view'));
+  }
+ 
+  // ---- init language (persisted) ----
+  let savedLang = 'en';
+  try{ savedLang = localStorage.getItem('ye-lang') || 'en'; }catch(e){}
+  applyLanguage(savedLang);
+</script>
+ 
+</body>
+</html>
+ 
